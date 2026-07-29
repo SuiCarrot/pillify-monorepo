@@ -199,4 +199,47 @@ describe('usecases', () => {
     const second = await app.planReminders(DEFAULT_REMINDER_POLICY);
     expect(second.scheduledIds).toEqual(first.scheduledIds);
   });
+
+  it('updateMedication clears snooze and rewrites today scheduledFor when timeOfDay changes', async () => {
+    const { clock, storage, app } = setup(new Date(2026, 6, 1, 16, 0));
+    const med = makeMedication({ cycleStartDate: '2026-07-01', timeOfDay: '08:00' });
+    await storage.saveMedication(med);
+
+    await app.snoozeDose({ medicationId: med.id });
+    const before = await storage.getDoseLog(makeDoseId(med.id, '2026-07-01'));
+    expect(before?.status).toBe('snoozed');
+    expect(new Date(before!.scheduledFor).getHours()).toBe(8);
+    expect(new Date(before!.scheduledFor).getMinutes()).toBe(0);
+
+    const updated = await app.updateMedication({ ...med, timeOfDay: '16:25' });
+    expect(updated.ok).toBe(true);
+
+    const after = await storage.getDoseLog(makeDoseId(med.id, '2026-07-01'));
+    expect(after?.status).toBe('pending');
+    expect(after?.snoozedUntil).toBeUndefined();
+
+    const wall = atLocalWallTime(clock.now(), '16:25');
+    if (!wall.ok) {
+      throw new Error('bad wall');
+    }
+    expect(after?.scheduledFor).toBe(toOffsetIso(wall.value));
+
+    const dashboard = await app.getDashboard(med.id);
+    expect(dashboard.ok).toBe(true);
+    if (dashboard.ok) {
+      expect(dashboard.value.medications[0]?.todayStatus).toBe('pending');
+      expect(dashboard.value.medications[0]?.scheduledFor).toBe(toOffsetIso(wall.value));
+    }
+  });
+
+  it('updateMedication does not rewrite a taken dose', async () => {
+    const { storage, app } = setup(new Date(2026, 6, 1, 8, 5));
+    const med = makeMedication({ cycleStartDate: '2026-07-01', timeOfDay: '08:00' });
+    await storage.saveMedication(med);
+    await app.takeDose({ medicationId: med.id });
+
+    await app.updateMedication({ ...med, timeOfDay: '16:25' });
+    const log = await storage.getDoseLog(makeDoseId(med.id, '2026-07-01'));
+    expect(log?.status).toBe('taken');
+  });
 });

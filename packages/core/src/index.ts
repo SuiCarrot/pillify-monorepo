@@ -30,3 +30,4 @@ export { getDashboard, type Dashboard, type DashboardMedication } from './usecas
 export { planReminders, type PlanRemindersResult } from './usecases/planReminders';
 export { snoozeDose, type SnoozeDoseInput } from './usecases/snoozeDose';
 export { takeDose, type TakeDoseInput } from './usecases/takeDose';
+export { updateMedication } from './usecases/updateMedication';

@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { App } from './App';
+import { AppRoutes } from './routes';
 
-describe('@pillify/web scaffold', () => {
-  it('exports the App component', () => {
-    expect(typeof App).toBe('function');
+describe('@pillify/web routes', () => {
+  it('exports the app route tree', () => {
+    expect(typeof AppRoutes).toBe('function');
   });
 });

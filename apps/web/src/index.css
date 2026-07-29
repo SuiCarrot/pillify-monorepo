@@ -19,3 +19,10 @@ body {
   color: var(--color-pillify-ink);
   background: var(--color-pillify-mist);
 }
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #f8fafc;
+    background: #020617;
+  }
+}
