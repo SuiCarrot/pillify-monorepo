@@ -33,7 +33,9 @@ export async function getDashboard(
 ): Promise<Result<Dashboard>> {
   const now = deps.clock.now();
   const all = await deps.storage.getMedications();
-  const medications = medicationId ? all.filter((med) => med.id === medicationId) : all;
+  const medications = medicationId
+    ? all.filter((med) => med.id === medicationId)
+    : all.filter((med) => med.active);
 
   if (medicationId && medications.length === 0) {
     return err('MEDICATION_NOT_FOUND', `Medication not found: ${medicationId}`);

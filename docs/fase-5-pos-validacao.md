@@ -18,7 +18,8 @@ que boa parte dela não importa.
 | Suporte a iOS | Briefing | Aparelho iOS entre os usuários |
 | Backup e sincronização | Briefing, plano Pro | Mais de um dispositivo |
 | Relatórios em PDF | Briefing, plano Pro | Demanda comprovada |
-| Múltiplos remédios e perfis | Briefing, plano Pro | Demanda comprovada |
+| Múltiplos remédios (UX) | Briefing / pedido pré-Fase 3 | **Feito na web** antes do Capacitor; ver [roadmap](roadmap.md) |
+| Perfis familiares | Briefing, plano Pro | Demanda comprovada |
 | Monetização | Briefing, Fase 3 | Todas as anteriores |
 
 ---
@@ -74,9 +75,13 @@ funciona em iOS com alarmes locais reais, então o canal de notificação é só
 
 **Restrição relevante:** o iOS limita a **64 notificações locais pendentes** por app. O
 horizonte rolante de 14 dias com escalonamento de 4 tentativas gera 56 agendamentos para um
-remédio — cabe, mas não sobra espaço para um segundo. O
-[ADR-004](00-arquitetura.md#adr-004--agendamento-idempotente-com-horizonte-rolante) já prevê
-horizonte configurável, então a adaptação é ajustar `horizonDays` por plataforma.
+remédio — cabe, mas não sobra espaço para um segundo. Com a UX multi-remédio já ativa no
+Android, isso **precisa ser tratado antes de qualquer build iOS**. Ver
+[roadmap](roadmap.md#restrição-ios-adiada--fora-do-escopo-atual).
+
+O [ADR-004](00-arquitetura.md#adr-004--agendamento-idempotente-com-horizonte-rolante) já prevê
+horizonte configurável, então a adaptação é ajustar `horizonDays` / escalonamento por
+plataforma.
 
 Vale registrar que essa restrição valida a decisão de manter o horizonte como parâmetro em vez
 de constante.

@@ -17,6 +17,7 @@ abaixo cobrem a execução técnica.
 | [Fase 3 — Capacitor Android](fase-3-capacitor-android.md) | Build nativa, alarmes exatos, notificações acionáveis |
 | [Fase 4 — Validação real](fase-4-validacao.md) | APK por sideload, roteiro de teste, critérios de sucesso |
 | [Fase 5 — Pós-validação](fase-5-pos-validacao.md) | Widget nativo, PWA, iOS, monetização |
+| [Roadmap](roadmap.md) | Restrições conhecidas (ex.: teto de notificações no iOS) e ordem preferencial |
 
 ## Decisão que orienta todo o plano
 
