@@ -1,0 +1,23 @@
+{
+  "name": "pillify-monorepo",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.9.0",
+  "scripts": {
+    "dev": "pnpm --filter @pillify/web dev",
+    "build": "pnpm --filter @pillify/web build",
+    "test": "pnpm -r --if-present test",
+    "lint": "eslint apps packages eslint.config.js",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "eslint": "^10.8.0",
+    "globals": "^16.4.0",
+    "prettier": "^3.9.6",
+    "typescript": "catalog:",
+    "typescript-eslint": "^8.65.0"
+  }
+}

@@ -13,7 +13,7 @@ errado.
 
 | Ferramenta | Versão | Papel |
 | --- | --- | --- |
-| TypeScript | 7.0.2 | Única linguagem do pacote |
+| TypeScript | 5.9.3 | Única linguagem do pacote |
 | date-fns | 4.4.0 | Aritmética de datas com suporte a fuso |
 | Vitest | 4.1.10 | Testes unitários, ambiente `node` |
 

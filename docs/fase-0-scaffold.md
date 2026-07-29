@@ -14,7 +14,7 @@ projeto ainda vazio.
 | --- | --- | --- |
 | Node.js | 24.14.0 | Runtime de build (já instalado na máquina) |
 | pnpm | 11.9.0 | Workspaces e catalog de versões (já instalado) |
-| TypeScript | 7.0.2 | Linguagem e type-check |
+| TypeScript | 5.9.3 | Linguagem e type-check |
 | Vite | 8.1.5 | Dev server e bundler |
 | React | 19.2.8 | UI |
 | `@vitejs/plugin-react` | 6.0.4 | Integração React no Vite |
@@ -28,8 +28,8 @@ projeto ainda vazio.
 
 ```
 pillify-monorepo/
-├─ .npmrc                    # node-linker=hoisted
-├─ pnpm-workspace.yaml       # packages + catalog de versões
+├─ .npmrc                    # auth/registry only (pnpm 11)
+├─ pnpm-workspace.yaml       # packages, catalog, nodeLinker, allowBuilds
 ├─ package.json              # scripts agregadores
 ├─ tsconfig.base.json        # compilerOptions compartilhados
 ├─ eslint.config.js          # flat config, raiz única
@@ -52,15 +52,19 @@ pillify-monorepo/
 ### Workspace e catalog
 
 O `pnpm-workspace.yaml` declara os pacotes e centraliza as versões num **catalog**, para que
-`packages/core` e `apps/web` nunca divirjam de versão:
+`packages/core` e `apps/web` nunca divirjam de versão. No pnpm 11, settings do projeto
+também vivem neste arquivo (não mais no `.npmrc` nem em `package.json#pnpm`):
 
 ```yaml
 packages:
   - 'apps/*'
   - 'packages/*'
 
+nodeLinker: hoisted
+allowBuilds: {}
+
 catalog:
-  typescript: ^7.0.2
+  typescript: ^5.9.3
   vitest: ^4.1.10
   react: ^19.2.8
   react-dom: ^19.2.8
@@ -68,11 +72,7 @@ catalog:
 
 Cada `package.json` referencia `"react": "catalog:"` em vez de repetir o número.
 
-### O `.npmrc` não é opcional
-
-```
-node-linker=hoisted
-```
+### O `nodeLinker: hoisted` não é opcional
 
 O Gradle do Android resolve plugins nativos do Capacitor por **caminho físico** dentro de
 `node_modules`, e o layout padrão do pnpm (symlinks para um store global) quebra essa
@@ -98,17 +98,18 @@ Sem isso, a primeira pressa de prazo fura a arquitetura e ninguém percebe até 
 
 ## Decisões
 
-### D0.1 — TypeScript 7 (compilador nativo)
+### D0.1 — TypeScript 5.9 (compatível com typescript-eslint)
 
-O `latest` do TypeScript hoje é **7.0.2**, a reescrita em Go, com type-check muito mais
-rápido. O typescript-eslint 8.65.0 é a versão corrente e acompanha essa linha.
+O `latest` do TypeScript em 29/07/2026 era **7.0.2** (reescrita em Go), mas
+`typescript-eslint@8.65.0` declara peer `typescript: ">=4.8.4 <6.1.0"`. Usar TS 7 quebra o
+lint com peer unmet.
 
-**Decisão:** adotar TypeScript 7.
+**Decisão:** adotar TypeScript **5.9.3**, a última linha 5.x estável dentro do peer do
+typescript-eslint. A versão fica no catalog do pnpm; quando o typescript-eslint passar a
+aceitar a linha 7, o bump é uma linha no `pnpm-workspace.yaml`.
 
-**Risco aceito:** sendo uma major recente com compilador reescrito, pode haver aresta em
-plugin de ecossistema. **Mitigação:** a versão está no catalog do pnpm, então o rollback para
-a linha 6.x é uma única linha alterada em um único arquivo. Se aparecer incompatibilidade na
-Fase 0, faz-se o downgrade ali mesmo, antes de existir código.
+**Alternativa descartada:** TypeScript 7 + desabilitar peer check. Mascararia a
+incompatibilidade e voltaria a morder no CI.
 
 ### D0.2 — Tailwind v4 via plugin do Vite, sem PostCSS
 
@@ -141,17 +142,17 @@ manutenção do que entrega.
 
 ### D0.5 — Aprovação explícita de scripts de instalação
 
-O pnpm 10+ não executa scripts de `postinstall` de dependências sem aprovação explícita via
-`onlyBuiltDependencies`. Isso é uma proteção contra supply chain attack e vamos mantê-la
-ligada.
+O pnpm 11 não executa scripts de `postinstall` de dependências sem aprovação explícita via
+`allowBuilds` no `pnpm-workspace.yaml` (mapa `nome: true|false`). Isso é uma proteção
+contra supply chain attack e vamos mantê-la ligada, começando com `allowBuilds: {}`.
 
 **Consequência prática:** na Fase 3, os pacotes do Capacitor que precisarem de postinstall
-terão que ser adicionados a essa lista conscientemente. Isso é desejável, não um atrito.
+terão que ser adicionados conscientemente (`nome: true`). Isso é desejável, não um atrito.
 
 ## Entregáveis
 
-- [ ] `.npmrc` com `node-linker=hoisted`
-- [ ] `pnpm-workspace.yaml` com packages e catalog
+- [ ] `pnpm-workspace.yaml` com packages, catalog, `nodeLinker: hoisted` e `allowBuilds`
+- [ ] `.npmrc` reservado a auth/registry (pnpm 11)
 - [ ] `tsconfig.base.json` em modo `strict`, com `verbatimModuleSyntax` e `isolatedModules`
 - [ ] `packages/core` com `package.json`, `tsconfig.json` e `src/index.ts` vazio
 - [ ] `apps/web` com Vite, React, Tailwind e um "hello world" estilizado

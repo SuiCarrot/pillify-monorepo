@@ -1,0 +1,19 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+# Capacitor/Android resolve native plugins by physical path under node_modules.
+# Must stay hoisted from the first install (see docs/fase-0-scaffold.md).
+nodeLinker: hoisted
+
+# Explicit allow-list for dependency install scripts (supply-chain default: deny).
+# Phase 3 may need Capacitor packages set to true here.
+allowBuilds: {}
+
+catalog:
+  typescript: ^5.9.3
+  vitest: ^4.1.10
+  react: ^19.2.8
+  react-dom: ^19.2.8
+  '@types/react': ^19.2.17
+  '@types/react-dom': ^19.2.3

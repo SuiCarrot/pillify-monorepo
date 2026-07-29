@@ -40,7 +40,7 @@ Versões verificadas em 29/07/2026.
 | --- | --- | --- |
 | Runtime de build | Node.js | 24.14.0 |
 | Gerenciador de pacotes | pnpm (workspaces + catalog) | 11.9.0 |
-| Linguagem | TypeScript | 7.0.2 |
+| Linguagem | TypeScript | 5.9.3 |
 | Bundler | Vite | 8.1.5 |
 | UI | React | 19.2.8 |
 | Estilo | Tailwind CSS (via `@tailwindcss/vite`) | 4.3.3 |

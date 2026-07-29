@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
+  --color-pillify-rose: #e11d48;
+  --color-pillify-ink: #0f172a;
+  --color-pillify-mist: #f8fafc;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-pillify-ink);
+  background: var(--color-pillify-mist);
+}

@@ -1,0 +1,37 @@
+node_modules/
+dist/
+build/
+coverage/
+*.local
+.DS_Store
+Thumbs.db
+
+# Vite
+apps/web/dist/
+
+# Capacitor / Android (build artifacts; android/ source is committed in Phase 3)
+**/android/build/
+**/android/.gradle/
+**/android/local.properties/
+**/android/captures/
+**/android/.idea/
+*.apk
+*.aab
+*.keystore
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+*.swo
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*

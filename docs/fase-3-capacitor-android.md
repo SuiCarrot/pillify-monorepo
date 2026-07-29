@@ -170,7 +170,7 @@ Apple, e o aparelho de validação é Android. iOS fica na
 | Risco | Mitigação |
 | --- | --- |
 | Fabricantes com bateria agressiva (Xiaomi, Samsung, Huawei) matam alarmes mesmo com `allowWhileIdle` | Onboarding orienta a adicionar o app às exceções de otimização de bateria. Validado na Fase 4 |
-| Gradle não resolve plugins por causa dos symlinks do pnpm | `node-linker=hoisted` no `.npmrc`, configurado desde a Fase 0 |
+| Gradle não resolve plugins por causa dos symlinks do pnpm | `nodeLinker: hoisted` no `pnpm-workspace.yaml`, configurado desde a Fase 0 |
 | IndexedDB despejado pela WebView sob pressão de memória | Item explícito no roteiro de teste da Fase 4 |
 | Limite de notificações pendentes do sistema | Horizonte rolante de 14 dias mantém o total na casa das dezenas |
 
